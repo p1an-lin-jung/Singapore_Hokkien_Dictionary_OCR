@@ -23,7 +23,7 @@ import yaml
 
 BASE = Path(__file__).parent
 PDF_PATH = BASE / "src" / "新加坡闽南话词典(2002).pdf"
-YAML_PATH = BASE / "词典正文.yaml"
+YAML_PATH = BASE / "dictionary_ocr" / "3_词典正文.yaml"
 
 FIRST_MAIN_PAGE = 67   # 正文起始 pdf 页
 DEFAULT_ZOOM = 1.3     # 渲染倍率（基础 120 DPI 之上）
