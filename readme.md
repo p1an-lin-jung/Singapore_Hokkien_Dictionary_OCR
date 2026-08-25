@@ -1,7 +1,7 @@
 # 新加坡闽南话词典 OCR 数字化文本
 > 《新加坡闽南话词典》｜周长楫、周清海 著｜2002 中国社会科学出版社
 
-![新加坡闽南话词典](./src/cover_page.png)
+<img src="./src/cover_page.png" alt="新加坡闽南话词典" width="40%" />
 
 你可以在这个 url 查看 pdf 原版： https://toaz.info/doc-view-4
 
