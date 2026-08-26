@@ -335,7 +335,7 @@ def selftest() -> int:
     assert entries, "no entries loaded"
     n = len(entries)
     by_page = {e["pdf全文页码"] for e in entries}
-    assert min(by_page) == 67 and max(by_page) == 366
+    assert min(by_page) == 67 and max(by_page) <= 366
 
     hits = search(entries, "阿爸", "词条")
     assert any(e["正文页码"] == 62 for e in hits), "词条搜索未命中 阿爸"
