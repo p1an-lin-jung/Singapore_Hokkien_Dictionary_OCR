@@ -204,6 +204,17 @@ def run_gui() -> int:
     for e in entries:
         by_pdf_page.setdefault(e["pdf全文页码"], []).append(e)
 
+    # 类目索引：以 H1 大类（如“天文地理”）为单位，映射到首次出现的 pdf 页码。
+    # section 字段形如 “天文地理 / （1）天文”，取 " / " 前部分作为 H1。
+    sections: list[tuple[str, int]] = []
+    _seen: set[str] = set()
+    for e in entries:
+        sec = (e.get("section") or "").split(" / ")[0].strip()
+        if not sec or sec in _seen:
+            continue
+        _seen.add(sec)
+        sections.append((sec, e["pdf全文页码"]))
+
     doc = fitz.open(PDF_PATH)
 
     root = tk.Tk()
@@ -255,16 +266,44 @@ def run_gui() -> int:
     ttk.Button(bar, text="▶", width=3,
                command=lambda: goto_page(state["page"] + 1)).pack(side="left", padx=(0, 12))
 
+    # 类目跳转（H1 大类）
+    ttk.Label(bar, text="类目").pack(side="left")
+    section_var = tk.StringVar(value="─ 选择大类 ─")
+    section_cb = ttk.Combobox(
+        bar, textvariable=section_var, state="readonly", width=14,
+        values=[name for name, _ in sections],
+    )
+    section_cb.pack(side="left", padx=(4, 12))
+
+    def on_section_pick(_evt=None):
+        name = section_var.get()
+        for n, p in sections:
+            if n == name:
+                goto_page(p)
+                break
+        # 选完后把焦点交回搜索框，方便键盘翻页
+        root.focus_set()
+    section_cb.bind("<<ComboboxSelected>>", on_section_pick)
+
     ttk.Label(bar, text="缩放").pack(side="left")
     ttk.Button(bar, text="－", width=3, command=lambda: zoom(-0.2)).pack(side="left", padx=(4, 0))
     ttk.Button(bar, text="＋", width=3, command=lambda: zoom(0.2)).pack(side="left")
+
+    # 键位/操作提示条（只读、淡色，不占程序逻辑）
+    hint = (
+        "← / ↑  上一页　　→ / ↓  下一页　　"
+        "鼠标滑轮 = 上下滚动　　Shift + 滑轮 = 左右滚动"
+    )
+    ttk.Label(root, text=hint, foreground="#888888").pack(
+        fill="x", padx=8, pady=(0, 2)
+    )
 
     # ── 主体：左 PDF，右 结果+词条 ──
     paned = ttk.Panedwindow(root, orient="horizontal")
     paned.pack(expand=True, fill="both", padx=8, pady=(0, 4))
 
     left = ttk.Frame(paned)
-    paned.add(left, weight=3)
+    paned.add(left, weight=4)
     canvas = tk.Canvas(left, bg="#555555", highlightthickness=0)
     cv = ttk.Scrollbar(left, orient="vertical", command=canvas.yview)
     ch = ttk.Scrollbar(left, orient="horizontal", command=canvas.xview)
@@ -275,11 +314,61 @@ def run_gui() -> int:
     left.rowconfigure(0, weight=1)
     left.columnconfigure(0, weight=1)
 
+    # 鼠标滑轮滚动（仅当鼠标位于词典 PDF 区域时生效）。
+    # 普通滑轮 = 上下；Shift + 滑轮 = 左右。
+    # 跨平台：Windows/macOS 用 <MouseWheel> + event.delta；
+    # Linux/X11 用 <Button-4>/<Button-5>。
+    WHEEL_STEP = 3
+
+    def _wheel_dir(event) -> int:
+        """返回 +1（下/右滚）或 -1（上/左滚）。"""
+        num = getattr(event, "num", 0)
+        if num == 4:
+            return -1
+        if num == 5:
+            return 1
+        delta = getattr(event, "delta", 0)
+        if delta == 0:
+            return 0
+        return -1 if delta > 0 else 1
+
+    def _on_wheel_y(event):
+        canvas.yview_scroll(_wheel_dir(event) * WHEEL_STEP, "units")
+        return "break"
+
+    def _on_wheel_x(event):
+        canvas.xview_scroll(_wheel_dir(event) * WHEEL_STEP, "units")
+        return "break"
+
+    def _bind_wheel(_e=None):
+        # bind_all 确保滑轮事件不会因 focus 在别处而掉给其它控件
+        canvas.bind_all("<MouseWheel>", _on_wheel_y)          # Win/mac 垂直
+        canvas.bind_all("<Shift-MouseWheel>", _on_wheel_x)    # Win/mac 水平
+        canvas.bind_all("<Button-4>", _on_wheel_y)            # Linux up
+        canvas.bind_all("<Button-5>", _on_wheel_y)            # Linux down
+        canvas.bind_all("<Shift-Button-4>", _on_wheel_x)      # Linux left
+        canvas.bind_all("<Shift-Button-5>", _on_wheel_x)      # Linux right
+
+    def _unbind_wheel(_e=None):
+        for seq in ("<MouseWheel>", "<Shift-MouseWheel>",
+                    "<Button-4>", "<Button-5>",
+                    "<Shift-Button-4>", "<Shift-Button-5>"):
+            canvas.unbind_all(seq)
+
+    canvas.bind("<Enter>", _bind_wheel)
+    canvas.bind("<Leave>", _unbind_wheel)
+
     right = ttk.Frame(paned)
-    paned.add(right, weight=2)
+    paned.add(right, weight=1)
     ttk.Label(right, text="搜索结果（点击跳转）", font=f_label).pack(anchor="w")
-    results_lb = tk.Listbox(right, height=7, exportselection=False, font=f_body,
-                            activestyle="dotbox")
+    results_lb = tk.Listbox(
+        right, height=8, exportselection=False, font=f_body,
+        activestyle="none",
+        borderwidth=1, relief="solid",
+        highlightthickness=0,
+        selectbackground="#4a90e2", selectforeground="#ffffff",
+        bg="#ffffff",
+    )
     results_lb.pack(fill="x", pady=(2, 8))
     ttk.Label(right, text="本页词条", font=f_label).pack(anchor="w")
     text = tk.Text(right, wrap="word", state="disabled", font=f_body,
@@ -389,9 +478,12 @@ def run_gui() -> int:
         results = search(entries, query_var.get(), mode_var.get())
         state["results"] = results
         results_lb.delete(0, "end")
-        for e in results:
+        for i, e in enumerate(results):
             ipa = " ".join(e["音标"])
-            results_lb.insert("end", f"{e['词条']}　{ipa}　· 正文p.{e['正文页码']}")
+            results_lb.insert("end", f"  {e['词条']}　{ipa}　· 正文p.{e['正文页码']}")
+            # 斛马条纹：奇偶行交替背景，形成可点击行的视觉分隔
+            if i % 2 == 1:
+                results_lb.itemconfigure(i, background="#f2f2f2")
         update_status(n_results=len(results))
 
     def on_result_select(_evt) -> None:
@@ -405,11 +497,32 @@ def run_gui() -> int:
     query.bind("<Return>", lambda _e: do_search())
     page_ent.bind("<Return>", lambda _e: goto_page(parse_page_input()))
     results_lb.bind("<<ListboxSelect>>", on_result_select)
-    root.bind("<Left>", lambda e: goto_page(state["page"] - 1) if not isinstance(e.widget, (tk.Entry, ttk.Entry)) else None)
-    root.bind("<Right>", lambda e: goto_page(state["page"] + 1) if not isinstance(e.widget, (tk.Entry, ttk.Entry)) else None)
+    def _paginate(delta: int):
+        """绑到方向键上；如果焦点在输入框里则不干预。"""
+        def _handler(e):
+            if isinstance(e.widget, (tk.Entry, ttk.Entry, ttk.Combobox)):
+                return None
+            goto_page(state["page"] + delta)
+            return "break"
+        return _handler
+
+    root.bind("<Left>",  _paginate(-1))
+    root.bind("<Up>",    _paginate(-1))
+    root.bind("<Right>", _paginate(+1))
+    root.bind("<Down>",  _paginate(+1))
 
     goto_page(FIRST_MAIN_PAGE)
     query.focus_set()
+    # 开窗后强制将分隔条推到靠右的位置，让左侧 PDF 占大头
+    def _set_initial_sash():
+        root.update_idletasks()
+        try:
+            total = paned.winfo_width()
+            if total > 200:
+                paned.sashpos(0, int(total * 0.72))
+        except tk.TclError:
+            pass
+    root.after(50, _set_initial_sash)
     root.mainloop()
     return 0
 
