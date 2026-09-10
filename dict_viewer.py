@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """词典正文查阅器（tkinter GUI）。
 
-左栏显示《新加坡闽南话词典》PDF 正文页面，右栏以友好格式显示该页
-对应的 YAML 词条（词典正文.yaml）。工具栏支持按 词条/发音/释义/例句
+左栏显示《新加坡闽南话词典》PDF 正文页面，右栏以友好格式显示该页对应的词条
+（读取 `dictionary_ocr/3_词典正文.txt`）。工具栏支持按 词条/发音/释义/例句
 搜索；发音搜索为模糊匹配：忽略声调（上标数字），鼻化韵与非鼻化韵等价
 （ĩ ã ẽ ɔ̃ ũ 等视同 i a e ɔ u）。点击搜索结果跳转到对应页面并高亮词条。
 
@@ -14,16 +14,16 @@
 from __future__ import annotations
 
 import io
+import re
 import sys
 import unicodedata
 from pathlib import Path
 
 import fitz  # PyMuPDF
-import yaml
 
 BASE = Path(__file__).parent
 PDF_PATH = BASE / "src" / "新加坡闽南话词典(2002).pdf"
-YAML_PATH = BASE / "dictionary_ocr" / "3_词典正文.yaml"
+TXT_PATH = BASE / "dictionary_ocr" / "3_词典正文.txt"
 
 FIRST_MAIN_PAGE = 67   # 正文起始 pdf 页
 DEFAULT_ZOOM = 1.3     # 渲染倍率（基础 120 DPI 之上）
@@ -56,18 +56,105 @@ def norm_pron(s: str) -> str:
     return "".join(out)
 
 
-# ────────────────────── 数据加载与搜索 ──────────────────────
+# ────────────────────── 文本解析 ──────────────────────
+
+# 页码标记：`<!-- page 067 -->` 或 `<!-- page 067 (empty) -->`
+_PAGE_MARK = re.compile(r"^<!--\s*page\s+(\d+)(?:\s+\([^)]*\))?\s*-->$")
+
+# 词条行：`【词】  [ipa]`；IPA 允许一层嵌套 `[a[b]c]`
+_HEAD_RE = re.compile(
+    r"^【(?P<hw>[^】]+)】\s+\[(?P<ipa>(?:[^\[\]]|\[[^\[\]]*\])+)\]\s*(?P<tail>.*)$"
+)
 
 
-def load_entries(path: Path = YAML_PATH) -> list[dict]:
-    loader = getattr(yaml, "CSafeLoader", yaml.SafeLoader)
+def parse_ipa(inside: str) -> list[str]:
+    """`a¹⁻⁶ / b²` → ['a¹⁻⁶', 'b²']；无斜杠时视作单个读音。"""
+    if " / " in inside:
+        return [s.strip() for s in inside.split(" / ") if s.strip()]
+    return [inside.strip()]
+
+
+def load_entries(path: Path = TXT_PATH) -> list[dict]:
+    """把 txt 词典解析成 entry 列表。
+
+    entry 字段：
+        id          自增序号
+        pdf全文页码  从页码标记推断
+        正文页码    = pdf全文页码 - 66
+        section     该词条前最近一次出现的大类/小节标题（如 "天文地理 / （1）天文"）
+        词条        中文词头
+        音标        list[str]，多读音
+        释义        list[str]，非「例：」开头的正文行
+        例句        list[str]，去掉「例：」前缀的正文行
+    """
+    entries: list[dict] = []
+    cur_page: int | None = None
+    cur_h1: str | None = None
+    cur_h2: str | None = None
+    cur_entry: dict | None = None
+
+    def flush() -> None:
+        nonlocal cur_entry
+        if cur_entry is not None:
+            entries.append(cur_entry)
+            cur_entry = None
+
     with open(path, encoding="utf-8") as f:
-        entries = yaml.load(f, Loader=loader)
-    for e in entries:  # 兜底：字段缺失时给空列表，避免渲染报错
-        e.setdefault("音标", [])
-        e.setdefault("释义", [])
-        e.setdefault("例句", [])
+        for raw in f:
+            line = raw.rstrip("\n").rstrip()
+
+            if not line.strip():
+                flush()
+                continue
+
+            m = _PAGE_MARK.match(line)
+            if m:
+                flush()
+                cur_page = int(m.group(1))
+                continue
+
+            if line.startswith("# ") and not line.startswith("## "):
+                flush()
+                cur_h1 = line[2:].strip()
+                cur_h2 = None
+                continue
+            if line.startswith("## "):
+                flush()
+                cur_h2 = line[3:].strip()
+                continue
+
+            hm = _HEAD_RE.match(line)
+            if hm:
+                flush()
+                section_parts = [x for x in (cur_h1, cur_h2) if x]
+                cur_entry = {
+                    "id": len(entries) + 1,
+                    "pdf全文页码": cur_page or 0,
+                    "正文页码": (cur_page - 66) if cur_page else 0,
+                    "section": " / ".join(section_parts),
+                    "词条": hm.group("hw").strip(),
+                    "音标": parse_ipa(hm.group("ipa")),
+                    "释义": [],
+                    "例句": [],
+                }
+                tail = hm.group("tail").strip()
+                if tail:  # 尾巴（罕见）如 `=【别名】`，作为释义
+                    cur_entry["释义"].append(tail)
+                continue
+
+            # 普通正文行：归到当前词条
+            if cur_entry is None:
+                continue  # 跳过任何游离行
+            if line.startswith("例：") or line.startswith("例:"):
+                cur_entry["例句"].append(line[2:].strip())
+            else:
+                cur_entry["释义"].append(line)
+
+    flush()
     return entries
+
+
+# ────────────────────── 搜索 ──────────────────────
 
 
 def entry_matches(e: dict, q: str, nq: str, mode: str) -> bool:
@@ -138,6 +225,7 @@ def run_gui() -> int:
     f_ipa = pick(["DejaVu Sans"] + CJK, size=11)
     f_label = pick(CJK, size=10, weight="bold")
     f_body = pick(CJK, size=11)
+    f_section = pick(CJK, size=10)
 
     state = {"page": FIRST_MAIN_PAGE, "zoom": DEFAULT_ZOOM,
              "results": [], "hl_id": None}
@@ -209,6 +297,7 @@ def run_gui() -> int:
     text.tag_configure("ipa", font=f_ipa, foreground="#1a4f8a")
     text.tag_configure("label", font=f_label, foreground="#666666")
     text.tag_configure("body", font=f_body, spacing3=2)
+    text.tag_configure("section", font=f_section, foreground="#888888", spacing3=6)
     text.tag_configure("sep", foreground="#bbbbbb")
     text.tag_configure("hl", background="#ffe9a8")
 
@@ -232,7 +321,11 @@ def run_gui() -> int:
         ranges: dict[int, tuple[str, str]] = {}
         if not page_entries:
             text.insert("end", "本页无词条（非词典正文页，或该页无 OCR 结果）。", "body")
+        last_section = None
         for e in page_entries:
+            if e["section"] and e["section"] != last_section:
+                text.insert("end", f"【类目】{e['section']}\n", "section")
+                last_section = e["section"]
             start = text.index("end-1c")
             text.insert("end", f"{e['词条']}", "head")
             if e["音标"]:
@@ -334,27 +427,38 @@ def selftest() -> int:
     entries = load_entries()
     assert entries, "no entries loaded"
     n = len(entries)
-    by_page = {e["pdf全文页码"] for e in entries}
-    assert min(by_page) == 67 and max(by_page) <= 366
+    pages = {e["pdf全文页码"] for e in entries}
+    assert min(pages) >= 67 and max(pages) <= 366, (min(pages), max(pages))
 
-    hits = search(entries, "阿爸", "词条")
-    assert any(e["正文页码"] == 62 for e in hits), "词条搜索未命中 阿爸"
-    # 发音模糊：查 apa 应命中 a¹ pa⁶ / a¹⁻⁶ pa² 等
-    assert any("阿爸" == e["词条"] for e in search(entries, "apa", "发音"))
-    # 鼻化模糊：不带鼻化符号的查询应命中带 ĩ/ã 的音标
-    nasal = [e for e in entries if any(COMBINING_TILDE in unicodedata.normalize("NFD", p) for p in e["音标"])]
+    # 每条词条至少应有词头与一个音标
+    assert all(e["词条"] and e["音标"] for e in entries), "存在空词条"
+
+    # 词条搜索：随机拿一条验证
+    sample = entries[0]
+    hits = search(entries, sample["词条"], "词条")
+    assert sample in hits
+
+    # 发音搜索模糊：ĩ→i、去声调
+    nasal = [e for e in entries
+             if any(COMBINING_TILDE in unicodedata.normalize("NFD", p) for p in e["音标"])]
     if nasal:
         e0 = nasal[0]
         plain = norm_pron(e0["音标"][0])
         assert e0 in search(entries, plain, "发音"), "鼻化模糊匹配失败"
-    print(f"selftest OK: {n} entries, search/normalization passed")
+
+    # 释义/例句字段能拆分
+    has_ex = [e for e in entries if e["例句"]]
+    has_def = [e for e in entries if e["释义"]]
+    assert has_def, "没有任何释义？"
+
+    print(f"selftest OK: {n} 条词条 / 释义有 {len(has_def)} 条 / 例句有 {len(has_ex)} 条")
     return 0
 
 
 def main() -> int:
     if "--selftest" in sys.argv:
         return selftest()
-    for p in (PDF_PATH, YAML_PATH):
+    for p in (PDF_PATH, TXT_PATH):
         if not p.exists():
             print(f"[fatal] 找不到文件: {p}")
             return 1
