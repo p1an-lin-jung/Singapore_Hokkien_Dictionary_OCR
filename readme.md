@@ -18,13 +18,13 @@
 
 OCR 按书的四个部分处理，每部分都有**逐页单文件**（`*_pages/`），最后**合并为一个整文件**（`dictionary_ocr/`）：
 
-| 部分 | 扫描页范围 | 逐页目录 | 合并文件 |
-|------|-----------|----------|----------|
-| 前言·序论 | 第 6–57 页 | `intro_pages/` | `dictionary_ocr/1_前言.md` |
-| 凡例 | 第 58–66 页 | `fanli_pages/` | `dictionary_ocr/2_凡例.md` |
-| 词典正文 | 第 67–366 页（300 页） | `main_pages/` | `dictionary_ocr/3_词典正文.txt` 与 `.bbox.json` |
-| 检索表说明 | 检索表首页 | — | `dictionary_ocr/4_检索表说明.md` |
-| 音序检索表 | 第 378–462 页 | `index_pages/` | `dictionary_ocr/4_检索表.txt` |
+| 部分 | 扫描页范围  | 合并文件 |
+|------|-----------|----------|
+| 前言·序论 | 第 6–57 页 | `dictionary_ocr/1_前言.md` |
+| 凡例 | 第 58–66 页 | `dictionary_ocr/2_凡例.md` |
+| 词典正文 | 第 67–366 页（300 页） | `dictionary_ocr/3_词典正文.txt` 与 `.bbox.json` |
+| 检索表说明 | 检索表首页  | `dictionary_ocr/4_检索表说明.md` |
+| 音序检索表 | 第 378–462 页 | `dictionary_ocr/4_检索表.txt` |
 
 - `dictionary_ocr/`：合并后的整份文本，日常查阅只看这里就够了。
 - `src/`：封面图和原书 PDF。
@@ -75,7 +75,7 @@ OCR 按书的四个部分处理，每部分都有**逐页单文件**（`*_pages/
 }
 ```
 
-- 坐标由 GPT-6 vision 模型生成，不保证像素级精确但足够定位。
+- 坐标由 GPT-6 模型生成，不保证像素级精确但足够定位。
 - 未能生成 bbox 的 3 页（090 / 340 / 365）均为无词条页（跨页续写正文或索引前言）。
 
 ### 检索表（TSV）
@@ -133,22 +133,6 @@ cd dict_output && python3 -m http.server 8000
 ```
 
 **零构建、零依赖**：HTML 中所有解析、搜索、高亮逻辑都是纯前端 JavaScript。
-
-### C. 自己部署
-
-如果想给自己搭一份可在浏览器访问的版本，本地拉一份包：
-
-```bash
-# 需要仓库上一层目录有 dict_images/main/*.png 原图
-python3 prepare_web.py --deploy --resize 900 --webp
-```
-
-产出 `_site/` 目录（自包含、约 50 MB），直接丢到任何静态主机（nginx / GitHub Pages / Netlify …）就能用，也可以本地预览：
-
-```bash
-cd _site && python3 -m http.server 8000
-# 浏览器打开 http://localhost:8000/
-```
 
 
 ## ⚠️ 质量说明
