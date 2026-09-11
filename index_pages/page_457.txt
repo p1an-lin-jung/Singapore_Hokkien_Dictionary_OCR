@@ -1,0 +1,70 @@
+tshiu³ huã⁶	手捍	50
+tshiu³ khiau¹	手跷	84
+tshiu³ khuan²	手环	109
+tshiu³ kun¹	手巾	57
+tshiu³ kut⁷	手骨	84
+tshiu³ lan¹	手跉	84
+tshiu³ le²	手脷	84
+tshiu³ lɔŋ²	手囊	108
+tshiu³ niau³	手爪	84
+tshiu³ pak⁷	手腹	84
+tshiu³ pua²	手盘	84
+tshiu³ sioh⁸	手液	84
+tshiu³ thau² taŋ⁶	手头重	152
+tshiu³ tian⁶	手电	57
+tshiu³ tsŋ³ kah⁷	手掌甲	84
+tshiu³ tsŋ³ thau² a³	手掌头仔	84
+tshiu³ tsi³ tho³	手指套	56
+tshiu³ tsi³	手指	109
+tshiu³ tɔ³	手肚	84
+tshiu³ ŋ³	手碗	106
+tshiu⁶ a³	树仔	45
+tshiu⁶ be² liu¹	树尾溜	45
+tshiu⁶ ka¹	树胶	45
+tshiu⁶ ni¹ khuan²	橡奶环	130
+tshiu⁶ ni¹ khɔ¹	橡皮箍	130
+tshiu⁶ ni¹ tshiu⁶	橡奶树	45
+tshiu⁶ ni¹ ue²	橡奶鞋	108
+tshiu⁶ phe² pɔ⁵	树皮布	107
+tshiu⁶ sin¹	树身	45
+tshiu⁶ thau²	树头	45
+tshiu⁶ tsai¹	树栽	45
+tshiu⁶ tsaŋ²	树丛	45
+tshiu⁶ tsi³	树子	45
+tshiu⁶ tsu²	树薯	45
+tshiu⁶ ŋ³	树影	45
+tshiu¹ hi²	鲳鱼	42
+tshiu² tɔ³	墙堵	50
+tshiu⁵ hɔŋ¹ khim²	唱风琴	132
+tshiu⁵ khek⁷	唱曲	139
+tshiu⁶	上	213
+tshiu⁶ kha¹	象脚	85
+tshiu⁶ ni¹ thɔ²	树奶糖	104
+tshiu⁶ phu³	上腐	232
+tshiu⁶ thau²	上头	124
+tshiu⁶ tiam⁵ thaŋ¹	上店窗	249
+tshiu⁶ tshi²	上泭	213
+tshiu⁶ tsui³	上水	220
+tshiok⁸	浞	187
+tshioŋ¹	冲	211
+tshioŋ¹ seŋ⁶	充盛	158
+tshioŋ¹ su¹	纵事	247
+tsho¹	臊	150
+tsho¹ khui⁵	臊气	150
+tsho³ that⁷	草室	57
+tsho⁵	刣	230
+tshoh⁷	謦	195
+tshoh⁷ tsha¹ tshui⁵	謦粗嘴	195
+tshu¹	舒	205
+tshu¹	趋	143
+tshu¹ pho¹	趋坡	5
+tshu³ baŋ³	觑懵	88
+tshu⁵	厝	49
+tshu⁵ a³	厝仔	49
+tshu⁵ hia⁶	厝瓦	49
+tshu⁵ keŋ¹	厝间	49
+tshu⁵ kha¹	厝脚	71
+tshu⁵ kue⁵	厝契	49
+tshu⁵ lai⁶ laŋ²	厝里人	63
+tshu⁵ pĩ¹	厝边	49
+tshu⁵ se⁵	厝税	49

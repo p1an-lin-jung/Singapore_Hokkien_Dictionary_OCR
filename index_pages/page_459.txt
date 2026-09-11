@@ -1,0 +1,68 @@
+tshut⁷	siā¹	出声	192
+tshut⁷	siau⁵	出数	236
+tshut⁷	sua¹	出山	127
+tshut⁷	than²	出头	236
+tshut⁷	tsai⁶	出在	292
+tshut⁷	tshiu³	出手	255
+tshut⁷	tshui⁵	出嘴	192
+tshut⁷	un⁶	出运	236
+tshut⁷	tsu¹	出珠	89
+tshɔ¹	粗	154
+tshɔ¹	hioŋ³	粗雄	161
+tshɔ¹	ioŋ³	粗勇	146
+tshɔ¹	kaŋ¹	粗工	74
+tshɔ¹	khɪŋ¹	粗糠	44
+tshɔ¹	phe²	粗皮	91
+tshɔ¹	siok⁸	粗俗	175
+tshɔ¹	taŋ⁶	粗重	155
+tshɔ¹	than³	粗桶	53
+tshɔ¹	tshiaŋ²	粗长	146
+tshɔ¹	tsua³	粗纸	58
+tshɔk⁷	簇	282
+tshɔŋ⁵	创	263
+tshɔŋ⁵	ti⁶	创治	247
+tshɪŋ¹	穿	218
+tshɪŋ¹	khaŋ¹	穿空	218
+tshɪŋ²	tɔŋ³	床堵	52
+tshɪŋ³	吮	93
+u²	tɔŋ¹	suan²	kue¹	余东旋街	10
+u³	se¹	羽纱	107
+u³	tuan⁶	缎	107
+u⁵	晀	205
+u⁶	有	271
+u⁶…bo²…	有…无…	271
+u⁶…bo²	有…无	271
+u⁶	giah⁸	有额	161
+u⁶	he⁵	有岁	226
+u⁶	heŋ⁶	有行	170
+u⁶	iã³	有影	176
+u⁶	khaŋ¹	有康	158
+u⁶	khaŋ¹	laŋ²	有康人	72
+u⁶	khuan³	有款	170
+u⁶	lioŋ⁶	有量	165
+u⁶	lɔ⁶	有路	262
+u⁶	lɔ⁶	eŋ⁶	有路用	268
+u⁶	na³	bo²	有若无	271
+u⁶	pian⁵	有变	262
+u⁶	se⁵	有势	165
+u⁶	sin¹	有娠	121
+u⁶	sin¹	laŋ²	有娠人	125
+u⁶	tã³	有胆	179
+u⁶	than¹	有通	271
+u⁶	tshai³	kaŋ¹	有采工	181
+u⁶	tsun³	bo²	有准无	271
+u⁶	tue³	有底	260
+u⁶	ŋ⁵	有晽	197
+ua³	倚	205
+ua³	beh⁷	倚要	294
+ua³	iĩ⁶	倚样	239
+ua³	kun⁶	倚近	205
+ua³	lua⁶	倚赖	239
+ua³	pŋ⁶	倚傍	239
+ua³	tsiah⁸	倚食	206
+uã³	碗	53
+uã³	bo⁶	碗帽	108
+uã³	kaŋ¹	碗公	53
+uã³	ke³	碗俫	97
+uã³	kiaŋ¹	碗疆	53
+uã³	kĩ²	碗墼	53

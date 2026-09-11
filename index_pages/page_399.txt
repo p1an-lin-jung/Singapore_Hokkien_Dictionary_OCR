@@ -1,0 +1,70 @@
+kaŋ⁶	共	257
+ke¹	加	240
+ke¹ he⁵	家賄	109
+ke¹ kaŋ¹	加工	175
+ke¹ kiam³	加減	292
+ke¹ liau³	加了	181
+ke¹ lua⁶	加偌	292
+ke¹ po⁵	家婆	76
+ke¹ si¹	家私	52
+ke¹ thĩ¹	加添	206
+ke¹ tsio³	加少	292
+ke²	假	225
+ke³	架	206
+ke⁵	馃	96
+ke³	假	180
+ke³ iã⁵	假映	181
+ke³ kʰa¹	架脚	206
+ke³ kʰaŋ¹	假空	181
+ke³ keŋ¹	假肩	107
+ke³ kʰi³	假齿	83
+ke³ si³	假死	217
+ke³ tiau²	馃条	97
+ke³ tsi³	果子	47
+ke⁵	过	221,292
+ke⁵ bin⁵	过面	260
+ke⁵ gian	过愁	197
+ke⁵ ke⁵	过过	292
+ke⁵ kʰui⁵	过气	233
+ke⁵ koŋ⁵	过贡	265
+ke⁵ lit⁸	过日	26
+ke⁵ mi²	过暝	110
+ke⁵ mŋ²	过门	125
+ke⁵ na² hue¹	芥蓝花	46
+ke⁵ pa²	过房	122
+ke⁵ phe⁵	过皮	92
+ke⁵ sim¹	过心	197
+ke⁵ sin¹	过身	126
+ke⁵ tiã⁶	过定	124
+ke⁵ tsʰiu³	过手	261
+ke⁶	下	146
+ke⁶ lo⁶	下路	176
+keh⁷ keh⁷ hi⁵	格格鱼	43
+keh⁷ lit⁸	隔日	26
+keh⁷ pak⁷ a¹ hĩã¹	隔腹阿兄	64
+keh⁷ pak⁷ a¹ tsi³	隔腹阿姊	64
+keh⁷ pak⁷ e⁵	隔腹的	64
+keh⁷ pak⁷ sio³ be⁶	隔腹小妹	64
+keh⁷ pak⁷ sio³ ti⁶	隔腹小弟	64
+keh⁷ sit⁸	隔食	91
+kek⁷	革	237
+kek⁷	格	237
+kek⁷	激	201
+kek⁷ he³ kʰi⁵	激火气	201
+kek⁷ kʰaŋ¹	激康	237
+kek⁷ kʰi⁵	激气	196
+kek⁷ kʰuan³	激款	237
+kek⁷ kʰui⁵ thau²	激气头	237
+kek⁷ lat⁸	激力	201
+kek⁷ leŋ² bio	吉宁庙	22
+kek⁷ leŋ² tian⁶	吉宁殿	140
+kek⁷ leŋ² tso³	吉宁枣	48
+kek⁷ leŋ² ŋa³	吉宁仔	69
+kek⁷ leŋ² ŋa³ kue¹	吉宁仔街	10
+kek⁷ li²	格理	237
+kek⁷ si	激死	201
+kek⁷ sim¹	激心	196
+kek⁷ sŋ¹ kio²	激霜桥	11
+kek⁷ sŋ⁵	格算	237
+kek⁸	极	103
+kek⁸ ke¹	极加	293

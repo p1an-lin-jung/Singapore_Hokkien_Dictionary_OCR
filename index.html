@@ -205,8 +205,10 @@
 <script>
 // ─────────────────── 配置 ───────────────────
 
-const TXT_URL  = "./dictionary_ocr/3_词典正文.txt";
-const BBOX_URL = "./dictionary_ocr/3_词典正文.bbox.json";
+// Cloudflare Pages / GitHub Pages 都支持 UTF-8 文件名；但 fetch 时建议预先
+// URL-encode 以免中间代理重编码发生误数。
+const TXT_URL  = encodeURI("./dictionary_ocr/3_词典正文.txt");
+const BBOX_URL = encodeURI("./dictionary_ocr/3_词典正文.bbox.json");
 // 页面图片：需要把 ../dict_images/main/*.png 复制或软链到 ./page_images/
 // (使用 prepare_web.py 一键完成)
 const IMG_URL_TPL = "./page_images/page_{PAGE}.png";

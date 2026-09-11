@@ -1,0 +1,70 @@
+tsat⁸	pak⁷	实腹	150
+tsat⁸	phĩ⁶	实鼻	88
+tsau³	走	187
+tsau³	be³	lau²	走马楼	50
+tsau³	bi⁶	走味	228
+tsau³	huan³	走反	229
+tsau³	kha¹	phe²	走脚皮	263
+tsau³	kue¹	sian¹	走街仙	77
+tsau³	lō⁶	走路	228
+tsau³	mia⁶	走命	229
+tsau³	sek⁷	走色	229
+tsau³	siam³	走闪	187
+tsau³	sio¹	liah⁸	走相掠	133
+tsau³	tshiu³	走手	253
+tsau³	tsoh⁸	走迍	229
+tsau³	tsuah⁸	走踅	229
+tsau⁵	khaŋ¹	灶腔	51
+tsau⁵	kha¹	灶脚	51
+tsau⁵	kue¹	灶鸡	41
+tsau⁵	pak⁷	灶腹	51
+tsau⁵	teŋ³	灶顶	51
+tsau⁵	thau²	灶头	51
+tsau⁶	找	241
+tsau⁶	tsĩ²	找钱	241
+tsaŋ²	丛	282
+tsaŋ²	沓	230
+tsaŋ²	ek⁸	keŋ¹	沓浴间	52
+tsaŋ²	ek⁸	沓浴	110
+tsaŋ²	tsui³	沓水	110
+tsaŋ³	总	247
+tsaŋ⁵	粽	97
+tse⁶	坐	185
+tse⁶	khu²	kha¹	keŋ¹	坐跈脚间	257
+tse⁶	le³	坐礼	263
+tse⁶	li³	坐理	263
+tse⁶	siau⁵	坐数	263
+tse⁶	suã¹	座山	74
+tse⁶	tā¹	坐担	263
+tse⁶	tsheŋ¹	坐清	228
+tse⁶	tsin¹	坐津	228
+tse⁶	tsue⁶	坐罪	263
+tse⁶	tue³	坐底	228
+tseh⁷	仄	115
+tseh⁷	绝	203
+tsek⁷	积	236
+tsek⁷	责	236
+tsek⁷	kɔŋ¹	叔公	60
+tsek⁷	khɔ⁵	积园	236
+tsek⁷	tai²	烛台	141
+tsek⁷	tau³	积捣	236
+tsek⁷	tɔk⁷	责督	236
+tseŋ¹	钟	56
+tseŋ¹	春	189
+tseŋ¹	ku⁶	a³	春臼仔	54
+tseŋ¹	tsha¹	精差	159
+tseŋ¹	sin²	精神	87
+tseŋ²	li³	情理	118
+tseŋ²	loh⁸	前落	49
+tseŋ²	pai³	前摆	27
+tseŋ²	sī¹	牲牲	38
+tseŋ²	sue⁵	从细	290
+tseŋ²	tsan¹	khi³	前层齿	83
+tseŋ³	种	44
+tseŋ³	整	246
+tseŋ⁵	hu³	tai⁶	ha⁶	政府大厦	14
+tseŋ⁵	keŋ¹	正经	168
+tseŋ⁵	tsu¹	种珠	92
+tseŋ⁶	tshĩ¹	tshĩ¹	静生生	180
+tsi¹	bai⁶	伃迈	86
+tsi¹	ku¹	lat⁸	芝居力	103

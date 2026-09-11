@@ -1,0 +1,70 @@
+lau²	tsui³	流水	4
+lau³	老	165
+lau³	a³	佬仔	77
+lau³	sit⁸	老实	165
+lau³	tioh	佬着	91
+lau⁵	落	221
+lau⁵	hɔŋ¹	落风	222
+lau⁵	khaŋ¹	tshia¹	落空车	257
+lau⁵	khui⁵	落气	257
+lau⁵	lau⁵	落落	222
+lau⁵	li⁶	落字	222
+lau⁵	ni³	落染	221
+lau⁵	sai³	落屎	89
+lau⁵	sek⁷	落色	222
+lau⁵	tho⁵	tseŋ⁵	落吐症	89
+lau⁵	thai¹	落胎	90
+lau⁵	tsheh⁸	tsheh⁸	落叉叉	222
+lau⁵	tshui⁵	落嘴	194
+lau⁵	tua⁶	tj⁷	thau²	落大肠头	90
+lau⁵	ue⁶	落话	194
+lau⁶	漏	207
+lau⁶	老	161
+lau⁶	a¹	po²	老阿婆	68
+lau⁶	bu³	老母	62
+lau⁶	e	老的	63
+lau⁶	he³	ia³	老伙仔	70
+lau⁶	huan¹	tian¹	老番癫	77
+lau⁶	hue¹	bak⁸	老花目	88
+lau⁶	ia²	keŋ¹	老爷宫	10
+lau⁶	kha¹	khu²	keŋ¹	khau³	老脚拘间口	10
+lau⁶	ku¹	tsĩ¹	老龟精	165
+lau⁶	liat⁸	闹热	157
+lau⁶	m³	老姆	68
+lau⁶	po⁶	tsai⁶	老步在	165
+lau⁶	pa¹	sat⁷	khau³	老扒口	10
+lau⁶	pe⁶	老爸	62
+lau⁶	pe⁶	bu³	老爸母	62
+lau⁶	phok⁷	kha¹	老噗卡	111
+lau⁶	tsi³	kha¹	老枳脚	10
+lau⁶	un²	老匀	69
+laŋ²	脓	90
+laŋ²	ga⁵	笼讶	111
+laŋ²	kheh⁷	人客	70
+laŋ²	suŋ²	笼床	53
+laŋ²	tshia¹	人车	112
+laŋ³	拢	267
+laŋ³	ŋa³	笼仔	52
+laŋ³	kuan²	拢权	267
+laŋ³	thau²	拢头	267
+laŋ⁵	弄	263
+laŋ⁵	lit⁸	弄日	28
+laŋ⁶	人	76
+laŋ⁶	弄	247
+laŋ⁶	guan²	siau²	弄元宵	32
+laŋ⁶	hɔŋ¹	弄风	211
+laŋ⁶	leŋ²	弄龙	133
+laŋ⁶	sai¹	弄狮	133
+laŋ⁶	tho³	ti⁶	kɔŋ¹	弄土地公	32
+le²	脶	84
+le²	按	185
+le²	hŋ²	hi²	梨园戏	136
+le²	ia²	螺仔	43
+le²	lio¹	黎撩	53
+le²	lo²	kha⁵	黎罗卡	111
+le²	lɔŋ²	黎笼	262
+le²	sin¹	黎申	111
+le³	pai³	礼拜	139
+le³	so⁵	礼数	117
+leh⁷	咧	294
+lek⁷	bak⁸	bai²	勒目眉	197

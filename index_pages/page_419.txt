@@ -1,0 +1,69 @@
+pe¹ tsun²	飞船	113
+pe²	耙	229
+pe² leŋ² tsun²	爬龙船	33
+pe² thau² khak⁷	耙头壳	189
+pe² tsiu⁶	耙痒	189
+pe³	把	267
+pe³ pak⁷	把缚	258
+pe³ tsiah⁸	把食	268
+pe⁶	爸	62
+pe⁶ ia³ kiã³	爸仔囝	66
+peh⁷	擘	188
+peh⁷	跖	191
+peh⁷ koŋ¹	伯公	60
+peh⁷ koŋ¹ be³	伯公马	38
+peh⁷ koŋ¹ hi²	伯公鱼	43
+peh⁷ koŋ¹ kue¹	伯公鸡	41
+peh⁸	白	144
+peh⁸ hi²	白鱼	42
+peh⁸ he³	白火	57
+peh⁸ hia⁶	白蚁	41
+peh⁸ kim¹	白金	127
+peh⁸ kio⁵	白桥	11
+peh⁸ ku³ tshai³	白韭菜	46
+peh⁸ lɔ⁶ si¹	白鹭鸶	41
+peh⁸ lah⁸ phok⁷ but⁸ kuan³	白蜡博物馆	20
+peh⁸ liau³	白了	258
+peh⁸ sua¹	白沙	14
+peh⁸ sua¹ phu²	白沙浮	9
+peh⁸ sun¹	白巡	74
+peh⁸ tshai⁵	白菜	46
+peh⁸ tshau³	白草	59
+peh⁸ tshat⁸	白贼	119
+peh⁸ tɔ⁶ hi²	白肚鱼	43
+pek⁷ kuã³	逼赶	257
+pek⁷ ua³	逼倚	214
+pek⁸	帛	57
+peŋ¹ a³	兵仔	74
+peŋ¹ seŋ¹	冰生	119
+peŋ²	爿	282
+peŋ³	反	190
+peŋ³ pak⁷	反腹	190
+peŋ³ peh⁸ liŋ²	反白仁	185
+peŋ³ phak⁷	反覆	190
+peŋ³ pĩ⁵	反变	254
+peŋ³ tɔ⁵ khap⁷	反倒盖	234
+peŋ³ tɔ⁶	反肚	190
+pi¹ ia³	□仔	132
+pi²	枇	282
+pi²	脾	86
+pi² thɔ³	脾土	86
+pi² ui⁶	脾胃	86
+pi³ pan⁶	比范	224
+pi³ peŋ⁶	比亚	250
+pi⁵ kiat⁷	秘结	89
+pi⁶ pan⁶	备办	217
+pĩ¹	绷	184
+pĩ¹	编	225
+pĩ¹ ia³	边仔	283
+pĩ¹ thau	边头	283
+pĩ²	棚	282
+pĩ²	平	143
+pĩ² pɔ¹	平埔	3
+pĩ³ hi²	鳊鱼	43
+pĩ⁵ baŋ³	变魍	247
+pĩ⁵ bin⁶	变面	247
+pĩ⁵ bo² baŋ³	变无魍	252
+pĩ⁵ kau² laŋ⁶	变猴弄	253
+pĩ⁵ khaŋ¹	变空	247
+pĩ⁵ kui³	变鬼	247

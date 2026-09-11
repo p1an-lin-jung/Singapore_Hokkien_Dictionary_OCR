@@ -1,0 +1,69 @@
+tã³	tiam³	打点	248
+tã³	tiap⁸	打叠	248
+tã⁶	诞	181
+tah⁷	搭	234
+tah⁷	ba⁶	搭密	267
+tah⁷	hiā⁷	搭赫	198
+tah⁷	kheh⁷	搭客	79
+tah⁷	kim¹	搭金	234
+tah⁷	tsian⁵	pĩ²	搭战棚	234
+tah⁸	踏	205
+tah⁸	to³	tĩ¹	踏倒叮	199
+tai²	垉	127
+tai⁵	带	243
+tai⁶	ɔŋ²	大王	70
+tai⁶	iat⁸	大阅	171
+tai⁶	kɔŋ¹	舵公	73
+tai⁶	lin²	大人	72
+tai⁶	lin²	ge²	大人衙	7
+tai⁶	seq¹	代先	297
+tai⁶	tɔŋ¹	leŋ²	大东陵	13
+tãi³	宰	230
+tak⁷	触	201
+tak⁸	逐	280
+tak⁸	ge²	逐个	76
+tak⁸	ni²	逐年	25
+tak⁸	si²	逐时	27
+tam¹	seq²	担承	243
+tam¹	su¹	iã²	担输赢	243
+tam¹	tã¹	担担	243
+tam¹	tai⁵	担戴	243
+tam²	澹	144
+tam³	pak⁷	打北	115
+tam⁵	颔	184
+tam⁵	thau²	颔头	184
+tam⁶	pin¹	ni²	淡滨尼	14
+tam⁶	poh⁸	a³	淡薄仔	281
+tam⁶	sin¹	lɔ⁶	thiok⁷	tsui³	ti²	淡申路蕃	23
+□	水池	23
+tan¹	瘅	89
+tan¹	kɔŋ¹	单公	261
+tan¹	lin²	peŋ²	单人爿	131
+tan¹	liɔŋ²	pa¹	kat⁷	丹戎巴葛	14
+tan¹	na³	bi³	la¹	丹那美拉	14
+tan²	瞋	205
+tan²	lui²	瞋雷	2
+tan²	seq⁵	ɔŋ²	lɔ⁶	陈圣王路	13
+tan²	si	tua⁶	tsɔŋ¹	su²	陈氏大宗祠	22
+tai⁸	值	237
+tai⁸	pi⁶	达备	297
+tai⁸	pin¹	tu¹	达宾拄	297
+tau¹	兜	49
+tau²	投	266
+tau³	pai²	捣牌	132
+tau⁵	斗	257
+tau⁵	kha¹	tshiu³	斗脚手	253
+tau⁵	khaŋ¹	斗空	264
+tau⁵	lau⁶	liat⁸	斗闹热	253
+tau⁵	liu³	斗纽	108
+tau⁵	phuã⁶	斗伴	253
+tau⁵	sā¹	kaŋ⁶	斗相共	253
+tau⁵	thau²	斗头	77
+tau⁵	tin⁶	斗阵	253
+tau⁶	a³	骰仔	133
+tau⁶	ge²	豆芽	102
+tau⁶	hu⁶	豆腐	102
+tau⁶	hue¹	豆花	102
+tau⁶	hue¹	tsui³	豆花水	102
+tau⁶	iu²	豆油	103
+tau⁶	kho¹	豆枯	103

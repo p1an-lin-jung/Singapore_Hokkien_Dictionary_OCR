@@ -1,0 +1,68 @@
+sun²	醇	150
+sun²	巡	244
+sun²	循	245
+sun² mi²	巡暝	210
+sun³ ke³	笋课	97
+sun³ khaŋ¹	笋空	58
+sun⁵ tso⁵ lit	逊佐日	26
+sun⁵ tsun² ni	逊前年	25
+sun⁶	顺	265
+sun⁶ bak⁸	顺目	245
+sun⁶ geh⁸	顺月	121
+sun⁶ hoŋ¹	顺风	1
+sun⁶ lau²	顺流	4
+sun⁶ se⁵	顺势	245
+sun⁶ sua⁵	顺续	269
+sun⁶ than⁵	顺趁	244
+sun⁶ tshui⁵	顺嘴	193
+sut⁷	摔	204
+sut⁷ au⁶ phau	摔后炮	255
+sut⁷ bak⁸ be³	摔目尾	185
+so¹	酥	151
+so¹ tan¹	苏丹	71
+so¹ tan¹ hue² kau⁵ tɔ²	苏丹回教堂	23
+so¹ tshe⁵	酥脆	151
+so¹ taŋ¹	苏东	42
+so³ tsai⁶	所在	5
+soŋ¹ bo⁵	松梦	167
+soŋ¹ ko¹ ue²	松糕鞋	108
+soŋ¹ koh⁸	松佬	108
+soŋ³	庸	173
+soŋ³	爽	153
+soŋ⁵ hio¹	宋凶	156
+soŋ⁵ hio¹ laŋ²	宋凶人	72
+sɔ¹	霜	2
+sɔ¹	酸	149
+sɔ¹ ko¹	霜糕	105
+sɔ¹ tshe⁵	酥脆	151
+sɔ¹ tu²	霜橱	53
+sɔ²	床	282
+sɔ³	爽	203
+sɔ³	损	203
+sɔ³ sin²	损神	238
+sɔ³ tɔ⁶	损荡	203
+sɔ⁵	缲	219
+sɔ⁵ giah⁸	算额	267
+sɔ⁵ lun⁶	算论	266
+sɔ⁵ puã²	算盘	117
+sɔ⁵ siau⁵	算数	267
+ta¹	焦	144
+ta¹ saŋ¹	焦松	144
+ta¹ so⁵	焦燥	153
+ta¹ sue³	焦洗	201
+ta⁵ bu⁶	罩雾	2
+ta⁶ ke¹	大家	62
+ta⁶ ke¹ kuã¹	大家官	62
+ta⁶ kuã¹	大官	62
+ta⁶ po¹	丈夫	68
+ta⁶ po¹ gin³ na³	丈夫囝仔	68
+ta⁶ po¹ kiã³	丈夫囝	65
+ta⁶ po¹ laŋ²	丈夫人	68
+ta⁶ po¹ sun¹	丈夫孙	65
+tã¹	担	235
+tã¹	当	27
+tã¹ nia³	担领	268
+tã¹ seŋ²	担承	268
+tã¹ tã⁵	担担	235
+tã³ han⁶	打限	198
+tã³ tham⁵	打探	248

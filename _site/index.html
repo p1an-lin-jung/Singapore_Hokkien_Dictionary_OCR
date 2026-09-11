@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>新加坡闽南话词典 · 网页版</title>
+<meta name="viewport" content="width=1200">
+<style>
+  :root {
+    --hl:       #ffe9a8;   /* 词条命中背景 */
+    --hl-box:   #e02020;   /* PDF 高亮框 */
+    --border:   #dcdcdc;
+    --muted:    #888;
+    --link:     #1a4f8a;
+    --head:     #8a1f1f;
+    --bg:       #fafaf7;
+    --panel-bg: #ffffff;
+    --row-alt:  #f5f5f5;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    font: 14px/1.55 -apple-system, "PingFang SC", "Microsoft YaHei",
+      "Noto Sans CJK SC", "WenQuanYi Micro Hei", sans-serif;
+    background: var(--bg);
+    color: #222;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding: 10px 14px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  header label { color: var(--muted); font-size: 12px; }
+  header input, header select, header button {
+    font: inherit; padding: 4px 8px; border: 1px solid var(--border);
+    background: white; border-radius: 3px;
+  }
+  header button { cursor: pointer; }
+  header button:hover { background: #f0f0f0; }
+  header .sep { width: 1px; height: 22px; background: var(--border); margin: 0 6px; }
+
+  .hint {
+    padding: 4px 14px; color: var(--muted); font-size: 12px;
+    background: #fafafa; border-bottom: 1px solid var(--border);
+  }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(340px, 1fr);
+    gap: 8px;
+    padding: 8px;
+    min-height: 0;
+  }
+
+  #pdfPanel {
+    background: #555;
+    border: 1px solid var(--border);
+    overflow: auto;
+    position: relative;
+    min-height: 0;
+  }
+  #pdfWrap {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+  }
+  #pdfImg { display: block; user-select: none; -webkit-user-drag: none; }
+  #hlBox {
+    position: absolute; pointer-events: none;
+    border: 3px solid var(--hl-box);
+    background: rgba(224, 32, 32, 0.06);
+    box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0);
+    display: none;
+    box-sizing: border-box;
+  }
+
+  #rightPanel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    gap: 8px;
+  }
+
+  #results {
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    max-height: 30vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  #results .empty { color: var(--muted); padding: 10px 12px; font-size: 13px; }
+  #results .row {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    font-size: 13px;
+  }
+  #results .row:nth-child(even) { background: var(--row-alt); }
+  #results .row:hover { background: #e8f0ff; }
+  #results .row.active { background: #4a90e2; color: white; }
+  #results .row .hw { font-weight: bold; }
+  #results .row .ipa { color: var(--link); margin: 0 6px; }
+  #results .row .page { color: var(--muted); font-size: 11px; }
+  #results .row.active .ipa,
+  #results .row.active .page { color: rgba(255,255,255,0.85); }
+
+  #entriesPanelHeader { padding: 6px 0; color: var(--muted); font-weight: bold; font-size: 12px; }
+  #entriesPanel {
+    background: #fdfdf8;
+    border: 1px solid var(--border);
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+    min-height: 0;
+  }
+  .entry {
+    padding: 6px 4px;
+    border-bottom: 1px dashed #ddd;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  .entry:hover { background: #fff6d8; }
+  .entry.active { background: var(--hl); }
+  .entry .hw { color: var(--head); font-weight: bold; font-size: 15px; }
+  .entry .ipa { color: var(--link); margin-left: 6px; }
+  .entry .label { color: var(--muted); font-weight: bold; font-size: 12px; margin-top: 4px; }
+  .entry ol { margin: 2px 0 2px 22px; padding: 0; }
+  .entry ul { margin: 2px 0 2px 20px; padding: 0; list-style-type: '· '; }
+  .entry li { margin: 1px 0; }
+  .section-badge {
+    display: inline-block; padding: 1px 6px; margin-bottom: 4px;
+    background: #eee; color: #555; font-size: 11px; border-radius: 8px;
+  }
+
+  #status {
+    padding: 4px 14px; color: var(--muted); font-size: 12px;
+    background: var(--panel-bg); border-top: 1px solid var(--border);
+  }
+  #status .warn { color: #a33; }
+</style>
+</head>
+<body>
+
+<header>
+  <label>搜索</label>
+  <input id="q" type="text" placeholder="词条 / 音标 / 释义 / 例句 …" size="22">
+  <select id="mode">
+    <option value="all">全部</option>
+    <option value="hw">词条</option>
+    <option value="pron">发音</option>
+    <option value="def">释义</option>
+    <option value="ex">例句</option>
+  </select>
+  <button id="searchBtn">搜索</button>
+
+  <span class="sep"></span>
+
+  <button id="prevBtn" title="上一页 (← / ↑)">◀</button>
+  <input id="pageInput" size="4" style="text-align:center">
+  <label id="pageMax">/ ?</label>
+  <button id="gotoBtn">跳转</button>
+  <button id="nextBtn" title="下一页 (→ / ↓)">▶</button>
+
+  <span class="sep"></span>
+
+  <label>类目</label>
+  <select id="section"><option value="">— 选择大类 —</option></select>
+
+  <span class="sep"></span>
+
+  <label>缩放</label>
+  <button id="zoomOutBtn">－</button>
+  <span id="zoomLabel">100%</span>
+  <button id="zoomInBtn">＋</button>
+</header>
+
+<div class="hint">
+  ← / ↑ 上一页　　→ / ↓ 下一页　　
+  点击右侧词条 → 左侧 PDF 高亮定位　　
+  发音搜索可省略声调（如 <code>apa</code> 匹配 <code>a¹ pa⁶</code>）
+</div>
+
+<main>
+  <div id="pdfPanel">
+    <div id="pdfWrap">
+      <img id="pdfImg" alt="page">
+      <div id="hlBox"></div>
+    </div>
+  </div>
+  <div id="rightPanel">
+    <div id="results"><div class="empty">输入关键词后回车搜索</div></div>
+    <div id="entriesPanelHeader">本页词条</div>
+    <div id="entriesPanel"></div>
+  </div>
+</main>
+
+<div id="status"></div>
+
+<script>
+// ─────────────────── 配置 ───────────────────
+
+// Cloudflare Pages / GitHub Pages 都支持 UTF-8 文件名；但 fetch 时建议预先
+// URL-encode 以免中间代理重编码发生误数。
+const TXT_URL  = encodeURI("./dictionary_ocr/3_词典正文.txt");
+const BBOX_URL = encodeURI("./dictionary_ocr/3_词典正文.bbox.json");
+// 页面图片：需要把 ../dict_images/main/*.png 复制或软链到 ./page_images/
+// (使用 prepare_web.py 一键完成)
+const IMG_URL_TPL = "./page_images/page_{PAGE}.webp";
+
+const FIRST_MAIN_PAGE = 67;
+const LAST_MAIN_PAGE  = 366;
+const DEFAULT_ZOOM = 1.0;
+
+// ─────────────────── 状态 ───────────────────
+
+const state = {
+  entries: [],                 // 所有词条 [{id, page, bookPage, section, hw, ipa[], defs[], exs[]}]
+  byPage: new Map(),           // pdf 页 → [entries]
+  bboxByPage: new Map(),       // pdf 页 → {image:{w,h}, entries:[{idx,hw,ipa,bbox}]}
+  sections: [],                // [{name, firstPage}]
+  page: FIRST_MAIN_PAGE,
+  zoom: DEFAULT_ZOOM,
+  results: [],
+  activeId: null,
+  imageNatW: 0, imageNatH: 0,  // 原图像素 (bbox 的 0..1 相对于此)
+};
+
+// ─────────────────── 发音归一化 ───────────────────
+// 与 dict_viewer.py 一致：去声调、去鼻化、去空白与标点、小写。
+
+const TONE_CHARS = new Set("⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻");
+const COMBINING_TILDE = "\u0303";
+const PUNCT_RE = /[\p{P}\p{S}]/u;
+
+function normPron(s) {
+  if (!s) return "";
+  const nfd = s.normalize("NFD");
+  let out = "";
+  for (const ch of nfd) {
+    if (ch === COMBINING_TILDE) continue;
+    if (TONE_CHARS.has(ch)) continue;
+    if (/\d/.test(ch)) continue;
+    if (/\s/.test(ch)) continue;
+    if (PUNCT_RE.test(ch)) continue;
+    out += ch.toLowerCase();
+  }
+  return out;
+}
+
+// ─────────────────── 文本解析 ───────────────────
+
+const PAGE_MARK_RE = /^<!--\s*page\s+(\d+)(?:\s+\([^)]*\))?\s*-->$/;
+const HEAD_RE = /^【([^】]+)】\s+\[((?:[^\[\]]|\[[^\[\]]*\])+)\]\s*(.*)$/;
+
+function parseIPA(inside) {
+  if (inside.includes(" / ")) {
+    return inside.split(" / ").map(s => s.trim()).filter(Boolean);
+  }
+  return [inside.trim()];
+}
+
+function parseDict(text) {
+  const entries = [];
+  let curPage = null, curH1 = null, curH2 = null, cur = null;
+
+  function flush() {
+    if (cur) { entries.push(cur); cur = null; }
+  }
+
+  for (const rawLine of text.split("\n")) {
+    const line = rawLine.replace(/\s+$/,"");
+    if (!line.trim()) { flush(); continue; }
+
+    let m = line.match(PAGE_MARK_RE);
+    if (m) { flush(); curPage = parseInt(m[1]); continue; }
+
+    if (line.startsWith("# ") && !line.startsWith("## ")) {
+      flush(); curH1 = line.slice(2).trim(); curH2 = null; continue;
+    }
+    if (line.startsWith("## ")) {
+      flush(); curH2 = line.slice(3).trim(); continue;
+    }
+
+    m = line.match(HEAD_RE);
+    if (m) {
+      flush();
+      const secParts = [curH1, curH2].filter(Boolean);
+      cur = {
+        id: entries.length + 1,
+        page: curPage || 0,
+        bookPage: curPage ? (curPage - 66) : 0,
+        section: secParts.join(" / "),
+        hw: m[1].trim(),
+        ipa: parseIPA(m[2]),
+        defs: [],
+        exs: [],
+      };
+      const tail = (m[3] || "").trim();
+      if (tail) cur.defs.push(tail);
+      continue;
+    }
+
+    if (!cur) continue;
+    if (line.startsWith("例：") || line.startsWith("例:")) {
+      cur.exs.push(line.slice(2).trim());
+    } else {
+      cur.defs.push(line);
+    }
+  }
+  flush();
+  return entries;
+}
+
+// ─────────────────── 搜索 ───────────────────
+
+function entryMatches(e, q, nq, mode) {
+  const inPron = () => nq && e.ipa.some(p => normPron(p).includes(nq));
+  const inText = (arr) => arr.join(" ").toLowerCase().includes(q);
+  switch (mode) {
+    case "pron": return inPron();
+    case "hw":   return e.hw.toLowerCase().includes(q);
+    case "def":  return inText(e.defs);
+    case "ex":   return inText(e.exs);
+    default:     return e.hw.toLowerCase().includes(q)
+                    || inPron() || inText(e.defs) || inText(e.exs);
+  }
+}
+
+function doSearch(query, mode) {
+  const q = query.trim();
+  if (!q) return [];
+  const lq = q.toLowerCase(), nq = normPron(q);
+  return state.entries.filter(e => entryMatches(e, lq, nq, mode));
+}
+
+// ─────────────────── 渲染 ───────────────────
+
+const $ = (id) => document.getElementById(id);
+
+function renderPageImage(page) {
+  const img = $("pdfImg");
+  img.onload = () => {
+    state.imageNatW = img.naturalWidth;
+    state.imageNatH = img.naturalHeight;
+    applyZoom();
+    drawHl();
+  };
+  img.onerror = () => {
+    state.imageNatW = 0; state.imageNatH = 0;
+    setStatus(`⚠️ 找不到页面图片：${IMG_URL_TPL.replace("{PAGE}", pad3(page))}`, true);
+  };
+  img.src = IMG_URL_TPL.replace("{PAGE}", pad3(page));
+}
+
+function applyZoom() {
+  const img = $("pdfImg");
+  if (!state.imageNatW) return;
+  const w = Math.round(state.imageNatW * state.zoom);
+  img.style.width = w + "px";
+  img.style.height = "auto";
+  drawHl();
+}
+
+function drawHl() {
+  const hl = $("hlBox");
+  hl.style.display = "none";
+  if (state.activeId == null) return;
+  const bboxPage = state.bboxByPage.get(state.page);
+  if (!bboxPage) return;
+
+  const idxOnPage = (state.byPage.get(state.page) || []).findIndex(e => e.id === state.activeId);
+  if (idxOnPage < 0) return;
+
+  const bList = bboxPage.entries || [];
+  let target = bList.find(b => b.idx === idxOnPage) || bList[idxOnPage];
+  if (!target || !target.bbox) return;
+
+  const img = $("pdfImg");
+  const dw = img.clientWidth, dh = img.clientHeight;
+  const [x1, y1, x2, y2] = target.bbox;
+  hl.style.left   = (x1 * dw) + "px";
+  hl.style.top    = (y1 * dh) + "px";
+  hl.style.width  = ((x2 - x1) * dw) + "px";
+  hl.style.height = ((y2 - y1) * dh) + "px";
+  hl.style.display = "block";
+
+  // 自动滚入可见区域
+  const wrap = $("pdfPanel");
+  const boxTop  = y1 * dh, boxLeft = x1 * dw;
+  const boxBot  = y2 * dh, boxRight = x2 * dw;
+  if (boxTop < wrap.scrollTop + 40 || boxBot > wrap.scrollTop + wrap.clientHeight - 40) {
+    wrap.scrollTo({ top: Math.max(0, boxTop - wrap.clientHeight * 0.2), behavior: "smooth" });
+  }
+  if (boxLeft < wrap.scrollLeft || boxRight > wrap.scrollLeft + wrap.clientWidth) {
+    wrap.scrollLeft = Math.max(0, boxLeft - wrap.clientWidth * 0.15);
+  }
+}
+
+function renderEntries(page) {
+  const panel = $("entriesPanel");
+  panel.innerHTML = "";
+  const list = state.byPage.get(page) || [];
+  if (!list.length) {
+    panel.innerHTML = '<div class="empty" style="color:var(--muted);padding:8px">本页无词条（非词典正文页，或该页无 OCR 结果）。</div>';
+    return;
+  }
+  let lastSection = null;
+  for (const e of list) {
+    if (e.section && e.section !== lastSection) {
+      const badge = document.createElement("div");
+      badge.className = "section-badge";
+      badge.textContent = e.section;
+      panel.appendChild(badge);
+      lastSection = e.section;
+    }
+    const div = document.createElement("div");
+    div.className = "entry";
+    if (state.activeId === e.id) div.classList.add("active");
+    div.dataset.id = e.id;
+
+    const hd = document.createElement("div");
+    hd.innerHTML =
+      `<span class="hw">${escapeHTML(e.hw)}</span>` +
+      (e.ipa.length ? `<span class="ipa">${e.ipa.map(escapeHTML).join("　")}</span>` : "");
+    div.appendChild(hd);
+
+    if (e.defs.length) {
+      const l = document.createElement("div"); l.className = "label"; l.textContent = "释义";
+      div.appendChild(l);
+      const ol = document.createElement("ol");
+      for (const d of e.defs) {
+        const li = document.createElement("li"); li.textContent = d; ol.appendChild(li);
+      }
+      div.appendChild(ol);
+    }
+    if (e.exs.length) {
+      const l = document.createElement("div"); l.className = "label"; l.textContent = "例句";
+      div.appendChild(l);
+      const ul = document.createElement("ul");
+      for (const s of e.exs) {
+        const li = document.createElement("li"); li.textContent = s; ul.appendChild(li);
+      }
+      div.appendChild(ul);
+    }
+
+    div.addEventListener("click", () => selectEntry(e.id));
+    panel.appendChild(div);
+  }
+  scrollActiveIntoView();
+}
+
+function scrollActiveIntoView() {
+  if (state.activeId == null) return;
+  const el = document.querySelector(`.entry[data-id="${state.activeId}"]`);
+  if (el) el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+
+function renderResults() {
+  const panel = $("results");
+  panel.innerHTML = "";
+  if (!state.results.length) {
+    panel.innerHTML = '<div class="empty">无搜索结果</div>';
+    return;
+  }
+  for (const e of state.results) {
+    const row = document.createElement("div");
+    row.className = "row";
+    if (state.activeId === e.id) row.classList.add("active");
+    row.innerHTML =
+      `<span class="hw">${escapeHTML(e.hw)}</span>` +
+      `<span class="ipa">${e.ipa.map(escapeHTML).join(" ")}</span>` +
+      `<span class="page">正文 p.${e.bookPage}</span>`;
+    row.addEventListener("click", () => gotoEntry(e));
+    panel.appendChild(row);
+  }
+}
+
+function setStatus(msg, warn=false) {
+  const el = $("status");
+  const cls = warn ? ' class="warn"' : '';
+  const nPage = (state.byPage.get(state.page) || []).length;
+  const book = (state.page >= FIRST_MAIN_PAGE && state.page <= LAST_MAIN_PAGE)
+    ? `　|　正文第 ${state.page - 66} 页` : "";
+  el.innerHTML = `<span${cls}>${msg}</span>　|　PDF 第 ${state.page} 页${book}　|　本页 ${nPage} 条词条`;
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function pad3(n) { return String(n).padStart(3, "0"); }
+
+// ─────────────────── 行为 ───────────────────
+
+function gotoPage(page, hlId=null) {
+  page = Math.max(FIRST_MAIN_PAGE, Math.min(LAST_MAIN_PAGE, page));
+  state.page = page;
+  state.activeId = hlId;
+  $("pageInput").value = page;
+  renderPageImage(page);
+  renderEntries(page);
+  // 更新结果列表选中态
+  renderResults();
+  setStatus(hlId ? `已选中词条 #${hlId}` : "");
+}
+
+function gotoEntry(e) {
+  gotoPage(e.page, e.id);
+}
+
+function selectEntry(id) {
+  state.activeId = id;
+  // 更新词条面板 active 样式（不整体重绘）
+  document.querySelectorAll(".entry").forEach(el => {
+    el.classList.toggle("active", parseInt(el.dataset.id) === id);
+  });
+  document.querySelectorAll("#results .row").forEach(el => el.classList.remove("active"));
+  drawHl();
+}
+
+function submitSearch() {
+  const q = $("q").value;
+  const mode = $("mode").value;
+  state.results = doSearch(q, mode);
+  renderResults();
+  setStatus(`搜索命中 ${state.results.length} 条`);
+}
+
+function zoom(delta) {
+  state.zoom = Math.max(0.4, Math.min(3.0, +(state.zoom + delta).toFixed(1)));
+  $("zoomLabel").textContent = Math.round(state.zoom * 100) + "%";
+  applyZoom();
+}
+
+function bindKeys() {
+  document.addEventListener("keydown", (e) => {
+    if (["INPUT","SELECT","TEXTAREA"].includes(document.activeElement.tagName)) return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      gotoPage(state.page - 1); e.preventDefault();
+    } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      gotoPage(state.page + 1); e.preventDefault();
+    }
+  });
+}
+
+function initToolbar() {
+  $("prevBtn").addEventListener("click", () => gotoPage(state.page - 1));
+  $("nextBtn").addEventListener("click", () => gotoPage(state.page + 1));
+  $("gotoBtn").addEventListener("click", () => {
+    const p = parseInt($("pageInput").value);
+    if (!isNaN(p)) gotoPage(p);
+  });
+  $("pageInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { const p = parseInt(e.target.value); if (!isNaN(p)) gotoPage(p); }
+  });
+  $("q").addEventListener("keydown", (e) => { if (e.key === "Enter") submitSearch(); });
+  $("searchBtn").addEventListener("click", submitSearch);
+  $("zoomInBtn").addEventListener("click", () => zoom(0.2));
+  $("zoomOutBtn").addEventListener("click", () => zoom(-0.2));
+  $("section").addEventListener("change", (e) => {
+    const idx = parseInt(e.target.value);
+    if (!isNaN(idx) && state.sections[idx]) {
+      gotoPage(state.sections[idx].firstPage);
+    }
+  });
+}
+
+function initSectionDropdown() {
+  const sel = $("section");
+  state.sections.forEach((s, i) => {
+    const opt = document.createElement("option");
+    opt.value = i; opt.textContent = `${s.name}　(p.${s.firstPage - 66})`;
+    sel.appendChild(opt);
+  });
+}
+
+function buildIndex(entries) {
+  const byPage = new Map();
+  for (const e of entries) {
+    if (!byPage.has(e.page)) byPage.set(e.page, []);
+    byPage.get(e.page).push(e);
+  }
+  const sections = [];
+  const seen = new Set();
+  for (const e of entries) {
+    const h1 = (e.section || "").split(" / ")[0].trim();
+    if (h1 && !seen.has(h1)) {
+      seen.add(h1);
+      sections.push({ name: h1, firstPage: e.page });
+    }
+  }
+  return { byPage, sections };
+}
+
+// ─────────────────── 启动 ───────────────────
+
+async function main() {
+  setStatus("正在加载词典数据…");
+  try {
+    const [txt, bboxJson] = await Promise.all([
+      fetch(TXT_URL).then(r => {
+        if (!r.ok) throw new Error(`加载 ${TXT_URL} 失败：HTTP ${r.status}`);
+        return r.text();
+      }),
+      fetch(BBOX_URL).then(r => r.ok ? r.json() : null).catch(() => null),
+    ]);
+
+    state.entries = parseDict(txt);
+    const { byPage, sections } = buildIndex(state.entries);
+    state.byPage = byPage;
+    state.sections = sections;
+
+    if (bboxJson && bboxJson.pages) {
+      for (const [k, v] of Object.entries(bboxJson.pages)) {
+        state.bboxByPage.set(parseInt(k), v);
+      }
+    }
+
+    $("pageMax").textContent = `/ ${LAST_MAIN_PAGE}`;
+    initToolbar();
+    initSectionDropdown();
+    bindKeys();
+    gotoPage(FIRST_MAIN_PAGE);
+    setStatus(`已加载 ${state.entries.length} 条词条 · bbox 数据 ${state.bboxByPage.size} 页`);
+  } catch (err) {
+    setStatus("加载失败：" + err.message, true);
+    console.error(err);
+  }
+}
+
+main();
+</script>
+</body>
+</html>

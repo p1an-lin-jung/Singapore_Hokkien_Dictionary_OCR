@@ -1,0 +1,70 @@
+kau¹	交	241
+kau¹	郊	115
+kau¹ a³	沟仔	52
+kau¹ am²	沟涵	52
+kau¹ hi⁶ sai³	勾耳屎	110
+kau¹ i³	交椅	52
+kau¹ in²	交寅	221
+kau¹ kat⁷	交结	242
+kau¹ khiã²	交衔	242
+kau¹ kiap⁷	交结	242
+kau¹ kuah⁷	交割	242
+kau¹ kuah⁷	交葛	242
+kau¹ kuan¹	交关	242
+kau¹ phua⁵	钩破	131
+kau¹ pue²	交陪	242
+kau¹ siau⁵	交数	242
+kau¹ tsham¹	交换	207
+kau¹ tshap⁷	交插	242
+kau¹ tsiap⁷	交接	242
+kau¹ uan²	交丸	71
+kau² a³	猴仔	38
+kau² hi²	猴鱼	42
+kau² ko¹	猴哥	78
+kau² tso³	猴枣	48
+kau² un³	猴蚓	42
+kau³	狗	38
+kau³	九	277
+kau³	玖	277
+kau³ a³ thaŋ²	狗仔虫	42
+kau³ bu³	狗母	38
+kau³ hia⁶	狗蚁	41
+kau³ kaŋ¹	狗公	38
+kau³ khiok⁷ tsap⁸ sā¹ uan¹	九曲十三弯	7
+kau³ pueh⁷ laŋ²	九八人	73
+kau³ tsap⁸ it⁷	九十一	278
+kau³ tsap⁸ kau³ uan¹	九十九弯	7
+kau³ tshua³	狗癖	91
+kau⁵	到	207
+kau⁵ be³	到尾	207
+kau⁵ giah⁸	够额	157
+kau⁵ hun⁶	够分	159
+kau⁵ kaŋ¹	够工	159
+kau⁵ kham³	到坎	265
+kau⁵ khuí⁵	够气	157
+kau⁵ kueh⁷	垢夹	109
+kau⁵ lat⁸	够力	159
+kau⁵ le³	够礼	168
+kau⁵ lɔ⁶ be³	到路尾	208
+kau⁵ te⁵	到带	207
+kau⁵ tsai⁵	够载	265
+kau⁶	厚	155
+kau⁶ bin⁶ phe²	厚面皮	167
+kau⁶ heŋ⁴	厚行	161
+kau⁶ hun¹	厚薰	104
+kau⁶ kaŋ¹	厚工	174
+kau⁶ le³ sɔ⁵	厚礼数	167
+kau⁶ seŋ⁵ te⁶	厚性地	161
+kau⁶ taŋ⁶	厚重	155
+kau⁶ tai⁶ tsi⁵	厚代志	174
+kau⁶ ue⁶	厚话	165
+kauh⁷	裹	201
+kaŋ¹	公	38
+kaŋ¹ hi² ia³	江鱼仔	43
+kaŋ¹ lui¹	工镭	119
+kaŋ¹ taŋ¹	江冬	47
+kaŋ³	港	112
+kaŋ³ kha¹	港脚	112
+kaŋ³ lɔ⁶	港路	112
+kaŋ³ po¹	港埠	112
+kaŋ³ ŋa³ ki²	港仔墘	11

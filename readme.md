@@ -99,6 +99,13 @@ a¹ baŋ⁵ a¹ leh⁸	阿网阿咧	64
 
 将 PDF 原页和词典正文（TXT）对照展示，查起来比翻文件方便：
 
+![桌面版界面截图](./src/gui.png)
+
+> 上图演示：搜索框输入 `phai khua`（发音模糊匹配，可省声调），
+> 右上搜索结果面板命中【坏款】【坏看】；点击【坏看】后自动跳到 PDF 第 236 页，
+> 左侧 PDF 上用红框标出词条位置，右下本页词条面板同步黄底高亮。
+> 底部状态栏同时显示 PDF 页码、原书正文页码、本页词条数。
+
 ```bash
 cd dict_output
 python3 dict_viewer.py
@@ -114,23 +121,21 @@ python3 dict_viewer.py
 
 ### B. 网页版 `index.html`（零依赖）
 
-一个单页应用，功能与桌面版基本对齐：左 PDF 页、右词条 + 搜索，点击词条高亮。部署前先把页面图片准备好：
+一个单页应用，功能与桌面版基本对齐：左 PDF 页、右词条 + 搜索，点击词条高亮。运行前先把页面图片准备好：
 
 ```bash
-# 仅需一次：把 dict_images/main/*.png 链到 dict_output/page_images/
-python3 prepare_web.py                # 本地开发：软链接（即时、不占空间）
-python3 prepare_web.py --copy         # 硬拷贝（部署到 GitHub Pages / CDN 需要）
-python3 prepare_web.py --copy --resize 900 --webp
-                                       # 缩到 900px 并转 webp，大幅减体积
+# 本地开发：软链接（即时、不占空间）
+python3 prepare_web.py
 
 # 本地预览
 cd dict_output && python3 -m http.server 8000
 # 浏览器打开 http://localhost:8000/
 ```
 
-- 可直接部署到 GitHub Pages / Netlify（需 `--copy`，因静态主机不支持相对软链接）。
-- 图片体积：原图 300 页 ≈ 115 MB；`--resize 900 --webp` 后约 20–30 MB。
-- **零构建、零依赖**：HTML 中所有解析、搜索、高亮逻辑都是纯前端 JavaScript。
+**零构建、零依赖**：HTML 中所有解析、搜索、高亮逻辑都是纯前端 JavaScript。
+
+
+
 
 ## ⚠️ 质量说明
 
