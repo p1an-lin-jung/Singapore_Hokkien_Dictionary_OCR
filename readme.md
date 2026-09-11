@@ -134,31 +134,21 @@ cd dict_output && python3 -m http.server 8000
 
 **零构建、零依赖**：HTML 中所有解析、搜索、高亮逻辑都是纯前端 JavaScript。
 
-### C. 部署到静态主机（Cloudflare Pages / GitHub Pages / Netlify）
+### C. 自己部署
 
-仓库采用**本地构建**：`_site/` 目录已预先打包并提交到 git，部署时静态主机直接从这个目录取用，无需任何构建命令。
-
-**本地重新构建 `_site/`**（仅当你更新了词典数据后需要）：
+如果想给自己搭一份可在浏览器访问的版本，本地拉一份包：
 
 ```bash
 # 需要仓库上一层目录有 dict_images/main/*.png 原图
 python3 prepare_web.py --deploy --resize 900 --webp
+```
 
-# 本地预览
+产出 `_site/` 目录（自包含、约 50 MB），直接丢到任何静态主机（nginx / GitHub Pages / Netlify …）就能用，也可以本地预览：
+
+```bash
 cd _site && python3 -m http.server 8000
+# 浏览器打开 http://localhost:8000/
 ```
-
-产出 `_site/` 内容：
-
-```
-_site/
-├── index.html                          # 入口页（已自动改为 .webp 引用）
-├── _headers                            # 静态主机缓存/MIME 配置
-├── dictionary_ocr/{txt, bbox.json}
-└── page_images/*.webp × 300
-```
-
-仓库根的 `wrangler.jsonc` 已声明 `assets.directory: "./_site"`，直接部署到 Cloudflare Pages 无需额外配置。
 
 
 ## ⚠️ 质量说明

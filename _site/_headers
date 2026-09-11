@@ -1,5 +1,5 @@
-# Cloudflare Pages / static host headers.
-# Long-cache the immutable data + page images; the HTML itself we keep fresh.
+# Static host cache / MIME hints (Netlify-style _headers).
+# Long-cache the immutable data + page images; keep the HTML fresh.
 
 /*.txt
   Content-Type: text/plain; charset=utf-8

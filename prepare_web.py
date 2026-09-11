@@ -4,13 +4,13 @@ Modes:
     # (1) develop mode -- symlink page images into dict_output/page_images/
     python3 prepare_web.py
 
-    # (2) copy real files (needed for GitHub / Cloudflare Pages)
+    # (2) copy real files (needed by most static hosts)
     python3 prepare_web.py --copy
 
-    # (3) resize + convert to webp (recommended for Cloudflare Pages)
+    # (3) resize + convert to webp (smallest bundle)
     python3 prepare_web.py --copy --resize 900 --webp
 
-    # (4) build a clean deploy bundle into dict_output/_site/ (recommended)
+    # (4) build a self-contained deploy bundle into dict_output/_site/
     python3 prepare_web.py --deploy
     python3 prepare_web.py --deploy --resize 900 --webp   # smallest bundle
 
@@ -19,7 +19,7 @@ Modes:
 
 The deploy bundle contains ONLY the files needed by index.html:
     _site/index.html
-    _site/_headers                 # Cloudflare Pages headers
+    _site/_headers                 # cache/MIME hints (Netlify-style)
     _site/dictionary_ocr/3_词典正文.txt
     _site/dictionary_ocr/3_词典正文.bbox.json
     _site/page_images/page_*.png|webp
@@ -33,13 +33,13 @@ import shutil
 import sys
 from pathlib import Path
 
-BASE = Path(__file__).parent
-SRC_DIR  = BASE / "dict_images" / "main"
-DEST_DIR = BASE / "dict_output" / "page_images"
-SITE_DIR = BASE / "dict_output" / "_site"
+BASE = Path(__file__).parent               # dict_output/
+SRC_DIR  = BASE.parent / "dict_images" / "main"   # 仓库上一层的原图目录
+DEST_DIR = BASE / "page_images"
+SITE_DIR = BASE / "_site"
 
-CF_HEADERS = """# Cloudflare Pages / static host headers.
-# Long-cache the immutable data + page images; the HTML itself we keep fresh.
+CF_HEADERS = """# Static host cache / MIME hints (Netlify-style _headers).
+# Long-cache the immutable data + page images; keep the HTML fresh.
 
 /*.txt
   Content-Type: text/plain; charset=utf-8
@@ -106,7 +106,7 @@ def _build_deploy_bundle(args) -> int:
         shutil.rmtree(do_deploy)
     do_deploy.mkdir(parents=True)
 
-    src_root = BASE / "dict_output"
+    src_root = BASE
 
     # 1. index.html
     shutil.copy2(src_root / "index.html", do_deploy / "index.html")
@@ -125,7 +125,7 @@ def _build_deploy_bundle(args) -> int:
     img_dst = do_deploy / "page_images"
     n, src_b, out_b = _emit_images(SRC_DIR, img_dst, args)
 
-    # 4. _headers for Cloudflare Pages
+    # 4. _headers for Netlify-style static hosts
     (do_deploy / "_headers").write_text(CF_HEADERS, encoding="utf-8")
 
     # 5. patch index.html if webp: rewrite the IMG_URL_TPL suffix
@@ -146,9 +146,8 @@ def _build_deploy_bundle(args) -> int:
     print(f"  _headers                1 file")
     print(f"  total bundle size:      {total/1024/1024:.1f} MB")
     print()
-    print("Cloudflare Pages / any static host: point at this directory.")
-    print("  cd dict_output/_site && python3 -m http.server 8000    # local preview")
-    print("  npx wrangler pages deploy dict_output/_site            # cloudflare")
+    print("drop this directory into any static host, or preview locally:")
+    print("  cd _site && python3 -m http.server 8000")
     return 0
 
 
@@ -162,7 +161,7 @@ def main() -> int:
     ap.add_argument("--webp", action="store_true",
                     help="convert to .webp (implies --copy; big size saving)")
     ap.add_argument("--deploy", action="store_true",
-                    help="build a self-contained _site/ ready for Cloudflare Pages")
+                    help="build a self-contained _site/ ready for any static host")
     ap.add_argument("--clean", action="store_true",
                     help="remove page_images/ (and _site/ if it exists) and exit")
     args = ap.parse_args()
