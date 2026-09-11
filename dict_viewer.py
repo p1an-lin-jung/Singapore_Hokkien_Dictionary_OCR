@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import io
+import json
 import re
 import sys
 import unicodedata
@@ -24,6 +25,7 @@ import fitz  # PyMuPDF
 BASE = Path(__file__).parent
 PDF_PATH = BASE / "src" / "新加坡闽南话词典(2002).pdf"
 TXT_PATH = BASE / "dictionary_ocr" / "3_词典正文.txt"
+BBOX_PATH = BASE / "dictionary_ocr" / "3_词典正文.bbox.json"
 
 FIRST_MAIN_PAGE = 67   # 正文起始 pdf 页
 DEFAULT_ZOOM = 1.3     # 渲染倍率（基础 120 DPI 之上）
@@ -203,6 +205,23 @@ def run_gui() -> int:
     by_pdf_page: dict[int, list[dict]] = {}
     for e in entries:
         by_pdf_page.setdefault(e["pdf全文页码"], []).append(e)
+
+    # 加载可选的 bbox 数据（可能缺失）：
+    #   bbox_pages[page_num] = {"image": {w,h}, "entries": [{idx, hw, ipa, bbox}]}
+    bbox_pages: dict[int, dict] = {}
+    if BBOX_PATH.exists():
+        try:
+            bbox_data = json.loads(BBOX_PATH.read_text(encoding="utf-8"))
+            for k, v in bbox_data.get("pages", {}).items():
+                bbox_pages[int(k)] = v
+        except Exception as ex:
+            print(f"[warn] 无法加载 bbox：{ex}", file=sys.stderr)
+
+    # 将 (页码, entry_id) 映射到 (页内 idx)：依靠同页中 entries 的顺序
+    entry_to_bbox_idx: dict[tuple[int, int], int] = {}
+    for page_num, es in by_pdf_page.items():
+        for i, e in enumerate(es):
+            entry_to_bbox_idx[(page_num, e["id"])] = i
 
     # 类目索引：以 H1 大类（如“天文地理”）为单位，映射到首次出现的 pdf 页码。
     # section 字段形如 “天文地理 / （1）天文”，取 " / " 前部分作为 H1。
@@ -391,6 +410,8 @@ def run_gui() -> int:
     text.tag_configure("hl", background="#ffe9a8")
 
     photo_ref = {"img": None}  # 防止 PhotoImage 被 GC
+    render_state = {"pdf_w": 0, "pdf_h": 0, "img_w": 0, "img_h": 0,
+                    "hl_rect": None}
 
     # ── 渲染 ──
 
@@ -402,10 +423,17 @@ def run_gui() -> int:
         canvas.delete("all")
         canvas.create_image(0, 0, anchor="nw", image=photo_ref["img"])
         canvas.configure(scrollregion=(0, 0, img.width, img.height))
+        render_state["img_w"] = img.width
+        render_state["img_h"] = img.height
+        render_state["hl_rect"] = None
 
     def render_entries(pdf_page: int) -> dict[int, tuple[str, str]]:
         text.configure(state="normal")
         text.delete("1.0", "end")
+        # 清理上一页入 tag。tag_names 后面会一个个 delete
+        for t in text.tag_names():
+            if t.startswith("entry:"):
+                text.tag_delete(t)
         page_entries = by_pdf_page.get(pdf_page, [])
         ranges: dict[int, tuple[str, str]] = {}
         if not page_entries:
@@ -416,21 +444,34 @@ def run_gui() -> int:
                 text.insert("end", f"【类目】{e['section']}\n", "section")
                 last_section = e["section"]
             start = text.index("end-1c")
-            text.insert("end", f"{e['词条']}", "head")
+            tag_name = f"entry:{e['id']}"
+            text.insert("end", f"{e['词条']}", ("head", tag_name))
             if e["音标"]:
-                text.insert("end", "  " + "　".join(e["音标"]) + "\n", "ipa")
+                text.insert("end", "  " + "　".join(e["音标"]) + "\n", ("ipa", tag_name))
             else:
-                text.insert("end", "\n", "body")
+                text.insert("end", "\n", ("body", tag_name))
             if e["释义"]:
-                text.insert("end", "释义\n", "label")
+                text.insert("end", "释义\n", ("label", tag_name))
                 for i, d in enumerate(e["释义"], 1):
-                    text.insert("end", f"  {i}. {d}\n", "body")
+                    text.insert("end", f"  {i}. {d}\n", ("body", tag_name))
             if e["例句"]:
-                text.insert("end", "例句\n", "label")
+                text.insert("end", "例句\n", ("label", tag_name))
                 for s in e["例句"]:
-                    text.insert("end", f"  · {s}\n", "body")
+                    text.insert("end", f"  · {s}\n", ("body", tag_name))
             text.insert("end", "─" * 30 + "\n", "sep")
-            ranges[e["id"]] = (start, text.index("end-1c"))
+            end = text.index("end-1c")
+            ranges[e["id"]] = (start, end)
+            # 点击本词条 → 高亮本词条 + 在左侧画 bbox
+            text.tag_bind(
+                tag_name, "<Button-1>",
+                lambda _evt, eid=e["id"]: (
+                    highlight_entry(ranges, eid),
+                    draw_bbox_on_canvas(state["page"], eid),
+                ),
+            )
+            # 鼠标悬停时变手型光标，提示可点
+            text.tag_bind(tag_name, "<Enter>", lambda _e: text.configure(cursor="hand2"))
+            text.tag_bind(tag_name, "<Leave>", lambda _e: text.configure(cursor=""))
         text.configure(state="disabled")
         return ranges
 
@@ -455,13 +496,61 @@ def run_gui() -> int:
 
     # ── 行为 ──
 
+    def draw_bbox_on_canvas(pdf_page: int, entry_id) -> None:
+        """在左侧 canvas 上画当前选中词条的高亮框，并滚动至可见。无 bbox 时作空。"""
+        # 清除旧高亮
+        if render_state["hl_rect"] is not None:
+            canvas.delete(render_state["hl_rect"])
+            render_state["hl_rect"] = None
+        if entry_id is None:
+            return
+        page_bbox = bbox_pages.get(pdf_page)
+        if not page_bbox:
+            return
+        # 找到本页 entry_id 对应的页内 idx
+        bbox_idx = entry_to_bbox_idx.get((pdf_page, entry_id))
+        if bbox_idx is None:
+            return
+        entries_on_page = page_bbox.get("entries", [])
+        # 优先按 idx 字段匹配（鲁棒），否则退回数组下标
+        target = None
+        for eb in entries_on_page:
+            if eb.get("idx") == bbox_idx:
+                target = eb
+                break
+        if target is None and 0 <= bbox_idx < len(entries_on_page):
+            target = entries_on_page[bbox_idx]
+        if target is None or not target.get("bbox"):
+            return
+        x1, y1, x2, y2 = target["bbox"]
+        iw, ih = render_state["img_w"], render_state["img_h"]
+        # 坐标已归一化到 0..1；乘回当前图像尺寸
+        cx1, cy1 = int(x1 * iw), int(y1 * ih)
+        cx2, cy2 = int(x2 * iw), int(y2 * ih)
+        render_state["hl_rect"] = canvas.create_rectangle(
+            cx1, cy1, cx2, cy2,
+            outline="#e02020", width=3,
+        )
+        # 将高亮滚入视野，类似居中
+        sw = canvas.winfo_width() or 1
+        sh = canvas.winfo_height() or 1
+        # 将 (cx1, cy1) 放到视口 约 20% 处
+        target_x = max(0, cx1 - int(sw * 0.15))
+        target_y = max(0, cy1 - int(sh * 0.20))
+        if iw > 0:
+            canvas.xview_moveto(target_x / iw)
+        if ih > 0:
+            canvas.yview_moveto(target_y / ih)
+
     def goto_page(pdf_page: int, hl_id=None) -> None:
         pdf_page = max(1, min(doc.page_count, pdf_page))
         state["page"] = pdf_page
+        state["hl_id"] = hl_id
         page_var.set(str(pdf_page))
         render_pdf(pdf_page)
         ranges = render_entries(pdf_page)
         highlight_entry(ranges, hl_id)
+        draw_bbox_on_canvas(pdf_page, hl_id)
         update_status()
 
     def parse_page_input() -> int:
@@ -473,6 +562,9 @@ def run_gui() -> int:
     def zoom(delta: float) -> None:
         state["zoom"] = max(0.6, min(3.0, round(state["zoom"] + delta, 1)))
         render_pdf(state["page"])
+        # 重新画上当前高亮框（如果有）
+        if state.get("hl_id") is not None:
+            draw_bbox_on_canvas(state["page"], state["hl_id"])
 
     def do_search() -> None:
         results = search(entries, query_var.get(), mode_var.get())
